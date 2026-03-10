@@ -1,0 +1,38 @@
+{
+  "name": "ui-test-automation-framework",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js",
+    "test:unit": "mocha --require ts-node/register 'src/tests/**/*.test.ts'",
+    "build": "tsc",
+    "lint": "eslint src/**/*.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Malconb/ui-test-automation-framework.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Malconb/ui-test-automation-framework/issues"
+  },
+  "homepage": "https://github.com/Malconb/ui-test-automation-framework#readme",
+  "devDependencies": {
+    "@cucumber/cucumber": "^12.7.0",
+    "@cucumber/pretty-formatter": "^3.2.0",
+    "@types/chai": "^5.2.3",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^25.4.0",
+    "@types/selenium-webdriver": "^4.35.5",
+    "chai": "^6.2.2",
+    "chromedriver": "^146.0.1",
+    "dotenv": "^17.3.1",
+    "mocha": "^11.7.5",
+    "selenium-webdriver": "^4.41.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
