@@ -54,8 +54,14 @@ export class AssertionHelpers {
     expect(actualTitle, `Page title should be "${expectedTitle}"`).to.equal(expectedTitle);
   }
 
-  async assertAttributeValue(selector: string, attribute: string, expectedValue: string): Promise<void> {
+  async assertAttributeValue(
+    selector: string,
+    attribute: string,
+    expectedValue: string
+  ): Promise<void> {
     const actualValue = await this.page.getAttribute(selector, attribute);
-    expect(actualValue, `Attribute "${attribute}" should be "${expectedValue}"`).to.equal(expectedValue);
+    expect(actualValue, `Attribute "${attribute}" should be "${expectedValue}"`).to.equal(
+      expectedValue
+    );
   }
 }

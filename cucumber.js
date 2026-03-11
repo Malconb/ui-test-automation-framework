@@ -9,14 +9,14 @@ module.exports = {
       '@cucumber/pretty-formatter'
     ],
     paths: ['features/**/*.feature'],
-    parallel: 2,
+    parallel: 1,
     publishQuiet: true,
     dryRun: false,
     forceExit: false,
     retry: 2,
     retryTagFilter: '@retry',
     worldParameters: {
-      baseUrl: process.env.BASE_URL || 'https://example.com'
+      baseUrl: process.env.BASE_URL || 'https://www.saucedemo.com'
     }
   }
 }

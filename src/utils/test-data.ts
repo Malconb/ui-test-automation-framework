@@ -12,18 +12,18 @@ export const TestData = {
     password: 'password123',
     email: 'test@example.com',
     firstName: 'Test',
-    lastName: 'User'
+    lastName: 'User',
   },
-  
+
   invalidUser: {
     username: 'invaliduser',
-    password: 'wrongpassword'
+    password: 'wrongpassword',
   },
-  
+
   lockedUser: {
     username: 'lockeduser',
-    password: 'password123'
-  }
+    password: 'password123',
+  },
 };
 
 export interface TestEnvironment {
@@ -39,5 +39,5 @@ export const getTestEnvironment = (): TestEnvironment => ({
   apiBaseUrl: process.env.API_BASE_URL || 'https://api.example.com',
   timeout: parseInt(process.env.TEST_TIMEOUT || '10000'),
   retries: parseInt(process.env.TEST_RETRIES || '2'),
-  headless: process.env.HEADLESS === 'true'
+  headless: process.env.HEADLESS === 'true',
 });

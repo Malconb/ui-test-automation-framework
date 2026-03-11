@@ -2,18 +2,18 @@ import { Page } from 'playwright';
 import { BasePage } from './base.page';
 
 export class LoginPage extends BasePage {
-  private readonly usernameInput = '#username';
-  private readonly passwordInput = '#password';
-  private readonly loginButton = '#login-button';
-  private readonly errorMessage = '.error-message';
-  private readonly welcomeMessage = '.welcome-message';
+  public readonly usernameInput = '#user-name';
+  public readonly passwordInput = '#password';
+  public readonly loginButton = '#login-button';
+  public readonly errorMessage = '[data-test="error"]';
+  public readonly welcomeMessage = '.app_logo';
 
   constructor(page: Page, baseUrl: string) {
     super(page, baseUrl);
   }
 
   async navigateToLogin(): Promise<void> {
-    await this.navigate('/login');
+    await this.navigate('/');
   }
 
   async login(username: string, password: string): Promise<void> {
@@ -31,9 +31,16 @@ export class LoginPage extends BasePage {
     return await this.getText(this.welcomeMessage);
   }
 
+  async isOnInventoryPage(): Promise<boolean> {
+    return await this.isVisible('.inventory_list');
+  }
+
+  async getProductTitle(): Promise<string> {
+    return await this.getText('.title');
+  }
+
   async isLoginButtonEnabled(): Promise<boolean> {
-    await this.waitForElement(this.loginButton);
-    return await this.page.isEnabled(this.loginButton);
+    return await this.isElementEnabled(this.loginButton);
   }
 
   async waitForLoginSuccess(): Promise<void> {

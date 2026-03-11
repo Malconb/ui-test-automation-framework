@@ -38,7 +38,7 @@ export abstract class BasePage {
 
   async getText(selector: string): Promise<string> {
     await this.waitForElement(selector);
-    return await this.page.textContent(selector) || '';
+    return (await this.page.textContent(selector)) || '';
   }
 
   async isVisible(selector: string): Promise<boolean> {
@@ -51,5 +51,27 @@ export abstract class BasePage {
 
   async waitForElementToBeHidden(selector: string, timeout: number = 10000): Promise<void> {
     await this.page.waitForSelector(selector, { state: 'hidden', timeout });
+  }
+
+  async isElementEnabled(selector: string): Promise<boolean> {
+    await this.waitForElement(selector);
+    return await this.page.isEnabled(selector);
+  }
+
+  async waitForElementContent(
+    selector: string,
+    expectedContent?: string,
+    timeout: number = 10000
+  ): Promise<void> {
+    await this.waitForElement(selector, timeout);
+    if (expectedContent) {
+      await this.page.waitForFunction(
+        `(() => {
+          const element = document.querySelector('${selector}');
+          return element && element.textContent && element.textContent.includes('${expectedContent}');
+        })()`,
+        { timeout }
+      );
+    }
   }
 }

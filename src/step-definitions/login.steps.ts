@@ -4,21 +4,19 @@ import { CustomWorld } from '../support/world';
 import { LoginPage } from '../page-objects/login.page';
 import { TestData } from '../utils/test-data';
 
-Given('I am on the login page', async function (this: CustomWorld) {
+Given('I am on the SauceDemo login page', async function (this: CustomWorld) {
   const loginPage = new LoginPage(this.page!, this.baseUrl);
   await loginPage.navigateToLogin();
 });
 
-When('I enter valid username and password', async function (this: CustomWorld) {
+When('I enter {string} as username', async function (this: CustomWorld, username: string) {
   const loginPage = new LoginPage(this.page!, this.baseUrl);
-  const validUser = TestData.validUser;
-  await loginPage.login(validUser.username, validUser.password);
+  await loginPage.fillInput(loginPage.usernameInput, username);
 });
 
-When('I enter invalid username and password', async function (this: CustomWorld) {
+When('I enter {string} as password', async function (this: CustomWorld, password: string) {
   const loginPage = new LoginPage(this.page!, this.baseUrl);
-  const invalidUser = TestData.invalidUser;
-  await loginPage.login(invalidUser.username, invalidUser.password);
+  await loginPage.fillInput(loginPage.passwordInput, password);
 });
 
 When('I leave username and password fields empty', async function (this: CustomWorld) {
@@ -46,20 +44,20 @@ When('there is a network connection issue', async function (this: CustomWorld) {
 
 When('I click the login button', async function (this: CustomWorld) {
   const loginPage = new LoginPage(this.page!, this.baseUrl);
-  await loginPage.clickElement('#login-button');
+  await loginPage.clickElement(loginPage.loginButton);
 });
 
-Then('I should be redirected to the dashboard', async function (this: CustomWorld) {
-  await this.page!.waitForURL('**/dashboard', { timeout: 10000 });
-  const currentUrl = this.page!.url();
-  expect(currentUrl).to.include('/dashboard');
-});
-
-Then('I should see a welcome message', async function (this: CustomWorld) {
+Then('I should be redirected to the inventory page', async function (this: CustomWorld) {
   const loginPage = new LoginPage(this.page!, this.baseUrl);
   await loginPage.waitForLoginSuccess();
-  const welcomeMessage = await loginPage.getWelcomeMessage();
-  expect(welcomeMessage).to.not.be.empty;
+  const isOnInventoryPage = await loginPage.isOnInventoryPage();
+  expect(isOnInventoryPage).to.be.true;
+});
+
+Then('I should see the products title', async function (this: CustomWorld) {
+  const loginPage = new LoginPage(this.page!, this.baseUrl);
+  const productTitle = await loginPage.getProductTitle();
+  expect(productTitle).to.include('Products');
 });
 
 Then('I should see an error message', async function (this: CustomWorld) {
@@ -71,7 +69,10 @@ Then('I should see an error message', async function (this: CustomWorld) {
 
 Then('I should remain on the login page', async function (this: CustomWorld) {
   const currentUrl = this.page!.url();
-  expect(currentUrl).to.include('/login');
+  expect(currentUrl).to.include('saucedemo.com');
+  const loginPage = new LoginPage(this.page!, this.baseUrl);
+  const isOnInventoryPage = await loginPage.isOnInventoryPage();
+  expect(isOnInventoryPage).to.be.false;
 });
 
 Then('I should see validation errors', async function (this: CustomWorld) {
@@ -87,11 +88,11 @@ Then('the login button should be disabled', async function (this: CustomWorld) {
   expect(isButtonEnabled).to.be.false;
 });
 
-Then('I should see an account locked message', async function (this: CustomWorld) {
+Then('I should see an account locked error message', async function (this: CustomWorld) {
   const loginPage = new LoginPage(this.page!, this.baseUrl);
   await loginPage.waitForLoginError();
   const errorMessage = await loginPage.getErrorMessage();
-  expect(errorMessage).to.include('locked');
+  expect(errorMessage).to.include('locked out');
 });
 
 Then('I should see a network error message', async function (this: CustomWorld) {
