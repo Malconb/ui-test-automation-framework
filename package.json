@@ -24,7 +24,8 @@
     "clean": "rimraf dist reports",
     "posttest": "npm run lint",
     "install:playwright": "playwright install",
-    "install:playwright:browsers": "playwright install --with-deps"
+    "install:playwright:browsers": "playwright install --with-deps",
+    "test:tag": "cucumber-js --tags"
   },
   "repository": {
     "type": "git",
