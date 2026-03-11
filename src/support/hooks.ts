@@ -1,30 +1,39 @@
-import { Before, After, BeforeAll, AfterAll, Status } from '@cucumber/cucumber';
+import { Before, After, BeforeAll, AfterAll, Status, ITestCaseHookParameter } from '@cucumber/cucumber';
 import { CustomWorld } from './world';
+import getLogger from '../utils/logger';
+
+const logger = getLogger();
 
 BeforeAll(async function () {
-  console.log('🚀 Setting up test environment...');
+  logger.info('Setting up test environment...');
 });
 
 AfterAll(async function () {
-  console.log('🧹 Cleaning up test environment...');
+  logger.info('Cleaning up test environment...');
 });
 
-Before(async function (this: CustomWorld) {
-  this.pickle = this.pickle || { name: 'Unknown Scenario' };
+Before(async function (this: CustomWorld, scenario: ITestCaseHookParameter) {
+  // Obtener el nombre del escenario desde el parámetro del hook
+  const scenarioName = scenario.pickle.name || 'Unknown Scenario';
+  this.scenarioName = scenarioName;
+  
   await this.initBrowser();
-  console.log(`🌐 Starting scenario: ${this.pickle.name}`);
+  logger.info(`Starting scenario: ${this.scenarioName}`);
 });
 
-After(async function (this: CustomWorld, result: any) {
+After(async function (this: CustomWorld, scenario: ITestCaseHookParameter) {
   if (this.page) {
     // Take screenshot on failure
-    if (result.status === Status.FAILED) {
-      const screenshotPath = `reports/screenshots/${this.pickle?.name?.replace(/\s+/g, '_') || 'unknown'}.png`;
+    if (scenario.result?.status === Status.FAILED) {
+      const scenarioName = this.scenarioName || 'unknown';
+      const screenshotPath = `reports/screenshots/${scenarioName.replace(/\s+/g, '_')}.png`;
       await this.page.screenshot({ path: screenshotPath, fullPage: true });
-      console.log(`📸 Screenshot saved: ${screenshotPath}`);
+      logger.info(`Screenshot saved: ${screenshotPath}`);
     }
   }
 
   await this.closeBrowser();
-  console.log(`✅ Scenario completed: ${this.pickle?.name || 'Unknown'} - ${result.status}`);
+  const scenarioName = this.scenarioName || 'Unknown';
+  const status = scenario.result?.status || 'UNKNOWN';
+  logger.info(`Scenario completed: ${scenarioName} - ${status}`);
 });

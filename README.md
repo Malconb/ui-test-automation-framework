@@ -107,7 +107,7 @@ Create a `.env` file with your configuration:
 BASE_URL=https://your-app-url.com
 API_BASE_URL=https://api.example.com
 HEADLESS=true
-TEST_TIMEOUT=10000
+TEST_TIMEOUT=15000
 TEST_RETRIES=2
 ENABLE_VIDEO=true
 ENABLE_TRACING=true

@@ -19,7 +19,11 @@ export class WaitHelpers {
     await this.page.waitForSelector(selector + ':not([disabled])', { timeout });
   }
 
-  async waitForTextToContain(selector: string, text: string, timeout: number = 10000): Promise<void> {
+  async waitForTextToContain(
+    selector: string,
+    text: string,
+    timeout: number = 10000
+  ): Promise<void> {
     await this.page.waitForFunction(
       ({ selector: sel, expectedText }: { selector: string; expectedText: string }) => {
         const element = document.querySelector(sel);
@@ -38,7 +42,11 @@ export class WaitHelpers {
     await this.page.waitForLoadState('networkidle', { timeout });
   }
 
-  async waitForElementCount(selector: string, expectedCount: number, timeout: number = 10000): Promise<void> {
+  async waitForElementCount(
+    selector: string,
+    expectedCount: number,
+    timeout: number = 10000
+  ): Promise<void> {
     await this.page.waitForFunction(
       ({ selector: sel, count }: { selector: string; count: number }) => {
         const elements = document.querySelectorAll(sel);
