@@ -1,5 +1,5 @@
 import { Page } from 'playwright';
-import { BasePage } from './base.page';
+import { BasePage } from '../base.page';
 
 export class LoginPage extends BasePage {
   public readonly usernameInput = '#user-name';

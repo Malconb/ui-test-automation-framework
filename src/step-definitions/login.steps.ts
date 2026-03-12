@@ -1,7 +1,7 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from 'chai';
 import { CustomWorld } from '../support/world';
-import { LoginPage } from '../page-objects/login.page';
+import { LoginPage } from '../page-objects/login-page/login.page';
 import { TestData } from '../utils/test-data';
 
 Given('I am on the SauceDemo login page', async function (this: CustomWorld) {
