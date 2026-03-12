@@ -101,11 +101,22 @@ npm run install:playwright
 
 ### Step 4 — Set up environment variables
 
-Create a `.env` file with your configuration:
+Create a `.env` file with your configuration (copy from `.env.example`):
 
 ```bash
-BASE_URL=https://your-app-url.com
+# Test Credentials
+STANDARD_USER=standard_user
+STANDARD_PASSWORD=secret_sauce
+INVALID_USER=invalid_user
+INVALID_PASSWORD=invalid_password
+LOCKED_USER=locked_out_user
+PROBLEM_USER=problem_user
+
+# Test URLs
+BASE_URL=https://www.saucedemo.com
 API_BASE_URL=https://api.example.com
+
+# Test Configuration
 HEADLESS=true
 TEST_TIMEOUT=15000
 TEST_RETRIES=2
@@ -113,6 +124,8 @@ ENABLE_VIDEO=true
 ENABLE_TRACING=true
 ENABLE_SCREENSHOTS=true
 ```
+
+**Important**: The framework now uses environment variables for test credentials. In your feature files, use variable names like `STANDARD_USER` instead of hardcoded values.
 
 ---
 

@@ -1,6 +1,10 @@
 import { Before, After, BeforeAll, AfterAll, Status, ITestCaseHookParameter } from '@cucumber/cucumber';
 import { CustomWorld } from './world';
 import getLogger from '../utils/logger';
+import * as dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
 
 const logger = getLogger();
 

@@ -1,7 +1,16 @@
-import { getTestEnvironment } from '../utils/test-data';
-
 export const TestConfig = {
-  ...getTestEnvironment(),
+  // Test credentials from environment variables
+  credentials: {
+    standardUser: process.env.STANDARD_USER || 'standard_user',
+    standardPassword: process.env.STANDARD_PASSWORD || 'secret_sauce',
+    invalidUser: process.env.INVALID_USER || 'invalid_user',
+    invalidPassword: process.env.INVALID_PASSWORD || 'invalid_password',
+    lockedUser: process.env.LOCKED_USER || 'locked_out_user',
+    problemUser: process.env.PROBLEM_USER || 'problem_user',
+  },
+
+  // Base URL from environment variable
+  baseUrl: process.env.BASE_URL || 'https://www.saucedemo.com',
 
   // Test timeouts
   defaultTimeout: 15000,
