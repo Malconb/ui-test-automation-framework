@@ -1,6 +1,7 @@
 import { Then } from '@cucumber/cucumber';
 import { expect } from 'chai';
 import { CustomWorld } from '../support/world';
+import './common-actions.steps'; // Import common actions
 
 Then('I should be on the dashboard page', async function (this: CustomWorld) {
   const currentUrl = this.page!.url();

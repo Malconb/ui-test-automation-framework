@@ -17,37 +17,50 @@ export class LoginPage extends BasePage {
   }
 
   async login(username: string, password: string): Promise<void> {
-    await this.fillInput(this.usernameInput, username);
-    await this.fillInput(this.passwordInput, password);
-    await this.clickElement(this.loginButton);
+    await this.actions.fillInput(this.usernameInput, username);
+    await this.actions.fillInput(this.passwordInput, password);
+    await this.actions.clickElement(this.loginButton);
     await this.waitForPageLoad();
   }
 
   async getErrorMessage(): Promise<string> {
-    return await this.getText(this.errorMessage);
+    return await this.actions.getText(this.errorMessage);
   }
 
   async getWelcomeMessage(): Promise<string> {
-    return await this.getText(this.welcomeMessage);
+    return await this.actions.getText(this.welcomeMessage);
   }
 
   async isOnInventoryPage(): Promise<boolean> {
-    return await this.isVisible('.inventory_list');
+    return await this.actions.isVisible('.inventory_list');
   }
 
   async getProductTitle(): Promise<string> {
-    return await this.getText('.title');
+    return await this.actions.getText('.title');
   }
 
   async isLoginButtonEnabled(): Promise<boolean> {
-    return await this.isElementEnabled(this.loginButton);
+    return await this.actions.isElementEnabled(this.loginButton);
   }
 
   async waitForLoginSuccess(): Promise<void> {
-    await this.waitForElementToBeVisible(this.welcomeMessage);
+    await this.actions.waitForElementToBeVisible(this.welcomeMessage);
   }
 
   async waitForLoginError(): Promise<void> {
-    await this.waitForElementToBeVisible(this.errorMessage);
+    await this.actions.waitForElementToBeVisible(this.errorMessage);
+  }
+
+  // Wrapper methods for backward compatibility with step definitions
+  async fillInput(selector: string, value: string): Promise<void> {
+    await this.actions.fillInput(selector, value);
+  }
+
+  async clickElement(selector: string): Promise<void> {
+    await this.actions.clickElement(selector);
+  }
+
+  async isVisible(selector: string): Promise<boolean> {
+    return await this.actions.isVisible(selector);
   }
 }
