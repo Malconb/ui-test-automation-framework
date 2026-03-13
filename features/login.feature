@@ -12,7 +12,7 @@ Feature: SauceDemo Login
     And I enter "STANDARD_PASSWORD" on "password" field
     And I click "login" button
     Then I should be redirected to "inventory" page
-    And I should see the products title
+    And I should see text "Products" on page
 
   @login
   Scenario: Failed login with invalid credentials
@@ -43,4 +43,4 @@ Feature: SauceDemo Login
     And I enter "STANDARD_PASSWORD" on "password" field
     And I click "login" button
     Then I should be redirected to "inventory" page
-    And I should see the products title
+    And I should see text "Products" on page

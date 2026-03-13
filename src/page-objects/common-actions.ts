@@ -90,7 +90,9 @@ export class CommonActions {
     expectedContent?: string,
     timeout: number = 10000
   ): Promise<void> {
-    logger.info(`Waiting for element content: ${selector} (expected: "${expectedContent || 'any'}")`);
+    logger.info(
+      `Waiting for element content: ${selector} (expected: "${expectedContent || 'any'}")`
+    );
     try {
       await this.waitForElement(selector, timeout);
       if (expectedContent) {

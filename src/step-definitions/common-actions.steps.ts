@@ -1,68 +1,73 @@
 import { When } from '@cucumber/cucumber';
-import { expect } from 'chai';
 import { CustomWorld } from '../support/world';
 import getLogger from '../utils/logger';
 
 const logger = getLogger();
 
 // Common form actions
-When('I enter {string} on {string} field', async function (this: CustomWorld, value: string, fieldName: string) {
-  logger.info(`Entering value "${value}" in field "${fieldName}"`);
-  
-  // Check if the value is an environment variable reference
-  let actualValue = value;
-  if (process.env[value]) {
-    actualValue = process.env[value]!;
-    logger.info(`Using environment variable: ${value} = ${actualValue}`);
-  }
+When(
+  'I enter {string} on {string} field',
+  async function (this: CustomWorld, value: string, fieldName: string) {
+    logger.info(`Entering value "${value}" in field "${fieldName}"`);
 
-  // Use field mapping for common field names
-  const fieldMapping: { [key: string]: string } = {
-    'username': '#user-name',
-    'user-name': '#user-name',
-    'password': '#password',
-    'email': '#email',
-    'name': '#name',
-    'firstname': '#firstname',
-    'lastname': '#lastname',
-    'phone': '#phone',
-    'address': '#address',
-    'city': '#city',
-    'zip': '#zip',
-    'postal': '#postal',
-    'country': '#country'
-  };
-  
-  const selector = fieldMapping[fieldName.toLowerCase()] || `#${fieldName}`;
-  logger.info(`Using selector: ${selector} for field: ${fieldName}`);
-  
-  try {
-    await this.page!.fill(selector, actualValue);
-    logger.info(`Successfully filled field: ${fieldName}`);
-  } catch (error) {
-    logger.error(`Failed to fill field ${fieldName}: ${error}`);
-    throw error;
-  }
-});
+    // Check if the value is an environment variable reference
+    let actualValue = value;
+    if (process.env[value]) {
+      actualValue = process.env[value]!;
+      logger.info(`Using environment variable: ${value} = ${actualValue}`);
+    }
 
-When('I enter {string} in input {string}', async function (this: CustomWorld, value: string, selector: string) {
-  logger.info(`Entering value "${value}" in input selector: ${selector}`);
-  
-  // Check if the value is an environment variable reference
-  let actualValue = value;
-  if (process.env[value]) {
-    actualValue = process.env[value]!;
-    logger.info(`Using environment variable: ${value} = ${actualValue}`);
+    // Use field mapping for common field names
+    const fieldMapping: { [key: string]: string } = {
+      username: '#user-name',
+      'user-name': '#user-name',
+      password: '#password',
+      email: '#email',
+      name: '#name',
+      firstname: '#firstname',
+      lastname: '#lastname',
+      phone: '#phone',
+      address: '#address',
+      city: '#city',
+      zip: '#zip',
+      postal: '#postal',
+      country: '#country',
+    };
+
+    const selector = fieldMapping[fieldName.toLowerCase()] || `#${fieldName}`;
+    logger.info(`Using selector: ${selector} for field: ${fieldName}`);
+
+    try {
+      await this.page!.fill(selector, actualValue);
+      logger.info(`Successfully filled field: ${fieldName}`);
+    } catch (error) {
+      logger.error(`Failed to fill field ${fieldName}: ${error}`);
+      throw error;
+    }
   }
-  
-  try {
-    await this.page!.fill(selector, actualValue);
-    logger.info(`Successfully filled input: ${selector}`);
-  } catch (error) {
-    logger.error(`Failed to fill input ${selector}: ${error}`);
-    throw error;
+);
+
+When(
+  'I enter {string} in input {string}',
+  async function (this: CustomWorld, value: string, selector: string) {
+    logger.info(`Entering value "${value}" in input selector: ${selector}`);
+
+    // Check if the value is an environment variable reference
+    let actualValue = value;
+    if (process.env[value]) {
+      actualValue = process.env[value]!;
+      logger.info(`Using environment variable: ${value} = ${actualValue}`);
+    }
+
+    try {
+      await this.page!.fill(selector, actualValue);
+      logger.info(`Successfully filled input: ${selector}`);
+    } catch (error) {
+      logger.error(`Failed to fill input ${selector}: ${error}`);
+      throw error;
+    }
   }
-});
+);
 
 When('I click on element {string}', async function (this: CustomWorld, selector: string) {
   logger.info(`Clicking on element with selector: ${selector}`);
@@ -78,7 +83,7 @@ When('I click on element {string}', async function (this: CustomWorld, selector:
 When('I click {string} button', async function (this: CustomWorld, buttonName: string) {
   logger.info(`Clicking button: ${buttonName}`);
   const buttonNameLower = buttonName.toLowerCase();
-  
+
   try {
     // Login page buttons
     if (['login', 'signin', 'sign-in', 'submit'].includes(buttonNameLower)) {
@@ -93,20 +98,17 @@ When('I click {string} button', async function (this: CustomWorld, buttonName: s
       const { CartPage } = await import('../page-objects/cart-page/cart.page');
       const cartPage = new CartPage(this.page!, this.baseUrl);
       await cartPage.addToCart();
-    }
-    else if (buttonNameLower === 'cart') {
+    } else if (buttonNameLower === 'cart') {
       logger.info(`Navigating to cart`);
       const { CartPage } = await import('../page-objects/cart-page/cart.page');
       const cartPage = new CartPage(this.page!, this.baseUrl);
       await cartPage.goToCart();
-    }
-    else if (buttonNameLower === 'checkout') {
+    } else if (buttonNameLower === 'checkout') {
       logger.info(`Proceeding to checkout`);
       const { CartPage } = await import('../page-objects/cart-page/cart.page');
       const cartPage = new CartPage(this.page!, this.baseUrl);
       await cartPage.proceedToCheckout();
-    }
-    else if (buttonNameLower === 'continue') {
+    } else if (buttonNameLower === 'continue') {
       logger.info(`Continuing shopping`);
       const { CartPage } = await import('../page-objects/cart-page/cart.page');
       const cartPage = new CartPage(this.page!, this.baseUrl);
@@ -118,14 +120,12 @@ When('I click {string} button', async function (this: CustomWorld, buttonName: s
       const { NavigationPage } = await import('../page-objects/navigation.page');
       const navPage = new NavigationPage(this.page!, this.baseUrl);
       await navPage.openMenu();
-    }
-    else if (buttonNameLower === 'logout') {
+    } else if (buttonNameLower === 'logout') {
       logger.info(`Logging out`);
       const { NavigationPage } = await import('../page-objects/navigation.page');
       const navPage = new NavigationPage(this.page!, this.baseUrl);
       await navPage.logout();
-    }
-    else if (buttonNameLower === 'reset') {
+    } else if (buttonNameLower === 'reset') {
       logger.info(`Resetting app state`);
       const { NavigationPage } = await import('../page-objects/navigation.page');
       const navPage = new NavigationPage(this.page!, this.baseUrl);
@@ -236,27 +236,33 @@ When('I sort products by price low to high', async function (this: CustomWorld) 
   }
 });
 
-When('I wait for element {string} to be visible', async function (this: CustomWorld, selector: string) {
-  logger.info(`Waiting for element to be visible: ${selector}`);
-  try {
-    await this.page!.waitForSelector(selector, { state: 'visible' });
-    logger.info(`Element became visible: ${selector}`);
-  } catch (error) {
-    logger.error(`Element did not become visible: ${selector} - ${error}`);
-    throw error;
+When(
+  'I wait for element {string} to be visible',
+  async function (this: CustomWorld, selector: string) {
+    logger.info(`Waiting for element to be visible: ${selector}`);
+    try {
+      await this.page!.waitForSelector(selector, { state: 'visible' });
+      logger.info(`Element became visible: ${selector}`);
+    } catch (error) {
+      logger.error(`Element did not become visible: ${selector} - ${error}`);
+      throw error;
+    }
   }
-});
+);
 
-When('I wait for element {string} to be hidden', async function (this: CustomWorld, selector: string) {
-  logger.info(`Waiting for element to be hidden: ${selector}`);
-  try {
-    await this.page!.waitForSelector(selector, { state: 'hidden' });
-    logger.info(`Element became hidden: ${selector}`);
-  } catch (error) {
-    logger.error(`Element did not become hidden: ${selector} - ${error}`);
-    throw error;
+When(
+  'I wait for element {string} to be hidden',
+  async function (this: CustomWorld, selector: string) {
+    logger.info(`Waiting for element to be hidden: ${selector}`);
+    try {
+      await this.page!.waitForSelector(selector, { state: 'hidden' });
+      logger.info(`Element became hidden: ${selector}`);
+    } catch (error) {
+      logger.error(`Element did not become hidden: ${selector} - ${error}`);
+      throw error;
+    }
   }
-});
+);
 
 // Network actions
 When('there is a network connection issue', async function (this: CustomWorld) {

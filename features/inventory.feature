@@ -9,7 +9,7 @@ Feature: SauceDemo Inventory Page
     And I enter "STANDARD_PASSWORD" on "password" field
     And I click "login" button
     Then I should be redirected to "inventory" page
-    And I should see the products title
+    And I should see text "Products" on page
 
   @inventory @smoke
   Scenario: View all available products
@@ -24,7 +24,7 @@ Feature: SauceDemo Inventory Page
   Scenario: Verify product count and basic information
     When I wait for element ".inventory_list" to be visible
     Then I should see element ".inventory_list"
-    And I should see text containing "Products" in element ".title"
+    And I should see text "Products" in element ".title"
     And I should see at least 6 product items
     And I should see product names for all items
     And I should see product prices for all items
@@ -34,14 +34,14 @@ Feature: SauceDemo Inventory Page
     When I wait for element ".inventory_list" to be visible
     And I add the first product to cart
     Then I should see element ".shopping_cart_badge"
-    And I should see text containing "1" in element ".shopping_cart_badge"
+    And I should see text "1" in element ".shopping_cart_badge"
 
   @inventory @cart @outline
   Scenario Outline: Add multiple products to cart
     When I wait for element ".inventory_list" to be visible
     And I add "<product_name>" to cart
     Then I should see element ".shopping_cart_badge"
-    And I should see text containing "<cart_count>" in element ".shopping_cart_badge"
+    And I should see text "<cart_count>" in element ".shopping_cart_badge"
 
     Examples:
       | product_name             | cart_count |
@@ -68,4 +68,4 @@ Feature: SauceDemo Inventory Page
     And I add Sauce Labs Bike Light to cart
     And I add Sauce Labs Bolt T-Shirt to cart
     Then I should see element ".shopping_cart_badge"
-    And I should see text containing "3" in element ".shopping_cart_badge"
+    And I should see text "3" in element ".shopping_cart_badge"

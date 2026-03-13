@@ -30,7 +30,10 @@ export abstract class BasePage {
 
   async takeScreenshot(fileName: string): Promise<Buffer> {
     logger.info(`Taking screenshot: ${fileName}`);
-    const screenshot = await this.page.screenshot({ path: `reports/screenshots/${fileName}`, fullPage: true });
+    const screenshot = await this.page.screenshot({
+      path: `reports/screenshots/${fileName}`,
+      fullPage: true,
+    });
     logger.info(`Screenshot saved: reports/screenshots/${fileName}`);
     return screenshot;
   }

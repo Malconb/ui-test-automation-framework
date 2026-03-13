@@ -26,8 +26,10 @@ export class WaitHelpers {
   ): Promise<void> {
     await this.page.waitForFunction(
       ({ selector: sel, expectedText }: { selector: string; expectedText: string }) => {
+        /* eslint-disable no-undef */
         const element = document.querySelector(sel);
         return element && element.textContent?.includes(expectedText);
+        /* eslint-enable no-undef */
       },
       { selector, expectedText: text },
       { timeout }
@@ -49,8 +51,10 @@ export class WaitHelpers {
   ): Promise<void> {
     await this.page.waitForFunction(
       ({ selector: sel, count }: { selector: string; count: number }) => {
+        /* eslint-disable no-undef */
         const elements = document.querySelectorAll(sel);
         return elements.length === count;
+        /* eslint-enable no-undef */
       },
       { selector, count: expectedCount },
       { timeout }

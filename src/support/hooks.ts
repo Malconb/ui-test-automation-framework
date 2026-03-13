@@ -1,4 +1,11 @@
-import { Before, After, BeforeAll, AfterAll, Status, ITestCaseHookParameter } from '@cucumber/cucumber';
+import {
+  Before,
+  After,
+  BeforeAll,
+  AfterAll,
+  Status,
+  ITestCaseHookParameter,
+} from '@cucumber/cucumber';
 import { CustomWorld } from './world';
 import getLogger from '../utils/logger';
 import * as dotenv from 'dotenv';
@@ -20,7 +27,7 @@ Before(async function (this: CustomWorld, scenario: ITestCaseHookParameter) {
   // Obtener el nombre del escenario desde el parámetro del hook
   const scenarioName = scenario.pickle.name || 'Unknown Scenario';
   this.scenarioName = scenarioName;
-  
+
   await this.initBrowser();
   logger.info(`Starting scenario: ${this.scenarioName}`);
 });

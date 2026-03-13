@@ -6,17 +6,19 @@ export class AssertionHelpers {
 
   async assertElementExists(selector: string): Promise<void> {
     const element = await this.page.$(selector);
-    expect(element, `Element with selector "${selector}" should exist`).to.not.be.null;
+    if (!element) {
+      throw new Error(`Element with selector "${selector}" should exist`);
+    }
   }
 
   async assertElementVisible(selector: string): Promise<void> {
     const isVisible = await this.page.isVisible(selector);
-    expect(isVisible, `Element with selector "${selector}" should be visible`).to.be.true;
+    expect(isVisible, `Element with selector "${selector}" should be visible`).to.equal(true);
   }
 
   async assertElementHidden(selector: string): Promise<void> {
     const isVisible = await this.page.isVisible(selector);
-    expect(isVisible, `Element with selector "${selector}" should be hidden`).to.be.false;
+    expect(isVisible, `Element with selector "${selector}" should be hidden`).to.equal(false);
   }
 
   async assertTextEquals(selector: string, expectedText: string): Promise<void> {
@@ -31,12 +33,12 @@ export class AssertionHelpers {
 
   async assertElementEnabled(selector: string): Promise<void> {
     const isEnabled = await this.page.isEnabled(selector);
-    expect(isEnabled, `Element with selector "${selector}" should be enabled`).to.be.true;
+    expect(isEnabled, `Element with selector "${selector}" should be enabled`).to.equal(true);
   }
 
   async assertElementDisabled(selector: string): Promise<void> {
     const isEnabled = await this.page.isEnabled(selector);
-    expect(isEnabled, `Element with selector "${selector}" should be disabled`).to.be.false;
+    expect(isEnabled, `Element with selector "${selector}" should be disabled`).to.equal(false);
   }
 
   async assertElementCount(selector: string, expectedCount: number): Promise<void> {

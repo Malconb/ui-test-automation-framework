@@ -1,3 +1,5 @@
+import { CustomWorld } from '../support/world';
+
 export interface TestUser {
   username: string;
   password: string;
@@ -44,7 +46,7 @@ export interface PageElement {
 
 export interface StepDefinition {
   pattern: RegExp | string;
-  implementation: Function;
+  implementation: (this: CustomWorld, ...args: string[]) => Promise<void> | void;
   timeout?: number;
 }
 

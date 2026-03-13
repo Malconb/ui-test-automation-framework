@@ -57,5 +57,5 @@ Then('I should remain on the login page', async function (this: CustomWorld) {
   expect(currentUrl).to.include('saucedemo.com');
   const loginPage = new LoginPage(this.page!, this.baseUrl);
   const isOnInventoryPage = await loginPage.isOnInventoryPage();
-  expect(isOnInventoryPage).to.be.false;
+  expect(isOnInventoryPage, 'Should not be on inventory page when login fails').to.equal(false);
 });
