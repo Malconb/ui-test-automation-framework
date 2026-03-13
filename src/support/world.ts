@@ -35,19 +35,48 @@ class CustomWorldImpl extends World implements CustomWorld {
   }
 
   async initBrowser(): Promise<void> {
+    const logger = getLogger();
     logger.info('Initializing browser...');
     const headless = process.env.HEADLESS === 'false' ? false : true;
     const slowMo = process.env.SLOWMO ? parseInt(process.env.SLOWMO) : 0;
-    this.browser = await chromium.launch({ headless, slowMo });
-    this.context = await this.browser.newContext();
-    this.page = await this.context.newPage();
+    logger.info(`Browser configuration - Headless: ${headless}, SlowMo: ${slowMo}ms`);
+    
+    try {
+      this.browser = await chromium.launch({ headless, slowMo });
+      logger.info('Browser launched successfully');
+      
+      this.context = await this.browser.newContext();
+      logger.info('Browser context created');
+      
+      this.page = await this.context.newPage();
+      logger.info('Browser page created');
+    } catch (error) {
+      logger.error(`Failed to initialize browser: ${error}`);
+      throw error;
+    }
   }
 
   async closeBrowser(): Promise<void> {
-    if (this.page) await this.page.close();
-    if (this.context) await this.context.close();
-    if (this.browser) await this.browser.close();
-    logger.info('Browser closed');
+    const logger = getLogger();
+    logger.info('Closing browser...');
+    
+    try {
+      if (this.page) {
+        await this.page.close();
+        logger.info('Browser page closed');
+      }
+      if (this.context) {
+        await this.context.close();
+        logger.info('Browser context closed');
+      }
+      if (this.browser) {
+        await this.browser.close();
+        logger.info('Browser closed');
+      }
+    } catch (error) {
+      logger.error(`Error closing browser: ${error}`);
+      throw error;
+    }
   }
 }
 
