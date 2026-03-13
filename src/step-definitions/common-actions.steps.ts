@@ -97,6 +97,49 @@ When('I click {string} button', async function (this: CustomWorld, buttonName: s
   }
 });
 
+// Natural language inventory actions
+When('I add {string} to cart', async function (this: CustomWorld, productName: string) {
+  const { InventoryPage } = await import('../page-objects/inventory-page/inventory.page');
+  const inventoryPage = new InventoryPage(this.page!, this.baseUrl);
+  await inventoryPage.addProductToCart(productName);
+});
+
+When('I add Sauce Labs Backpack to cart', async function (this: CustomWorld) {
+  const { InventoryPage } = await import('../page-objects/inventory-page/inventory.page');
+  const inventoryPage = new InventoryPage(this.page!, this.baseUrl);
+  await inventoryPage.addSauceLabsBackpackToCart();
+});
+
+When('I add Sauce Labs Bike Light to cart', async function (this: CustomWorld) {
+  const { InventoryPage } = await import('../page-objects/inventory-page/inventory.page');
+  const inventoryPage = new InventoryPage(this.page!, this.baseUrl);
+  await inventoryPage.addSauceLabsBikeLightToCart();
+});
+
+When('I add Sauce Labs Bolt T-Shirt to cart', async function (this: CustomWorld) {
+  const { InventoryPage } = await import('../page-objects/inventory-page/inventory.page');
+  const inventoryPage = new InventoryPage(this.page!, this.baseUrl);
+  await inventoryPage.addSauceLabsBoltTShirtToCart();
+});
+
+When('I add the first product to cart', async function (this: CustomWorld) {
+  const { InventoryPage } = await import('../page-objects/inventory-page/inventory.page');
+  const inventoryPage = new InventoryPage(this.page!, this.baseUrl);
+  await inventoryPage.addFirstProductToCart();
+});
+
+When('I sort products by name A to Z', async function (this: CustomWorld) {
+  const { InventoryPage } = await import('../page-objects/inventory-page/inventory.page');
+  const inventoryPage = new InventoryPage(this.page!, this.baseUrl);
+  await inventoryPage.sortByNameAscending();
+});
+
+When('I sort products by price low to high', async function (this: CustomWorld) {
+  const { InventoryPage } = await import('../page-objects/inventory-page/inventory.page');
+  const inventoryPage = new InventoryPage(this.page!, this.baseUrl);
+  await inventoryPage.sortByPriceAscending();
+});
+
 When('I wait for element {string} to be visible', async function (this: CustomWorld, selector: string) {
   await this.page!.waitForSelector(selector, { state: 'visible' });
 });

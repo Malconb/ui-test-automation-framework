@@ -69,6 +69,53 @@ Then('I should be redirected to {string} page', async function (this: CustomWorl
   expect(currentUrl).to.include(expectedUrlFragment);
 });
 
+// Element count validations
+Then('I should see at least {int} product items', async function (this: CustomWorld, minCount: number) {
+  const items = await this.page!.$$('.inventory_item');
+  expect(items.length).to.be.at.least(minCount);
+});
+
+Then('I should see product names for all items', async function (this: CustomWorld) {
+  const names = await this.page!.$$eval('.inventory_item_name', elements => 
+    elements.map(el => el.textContent?.trim()).filter(text => text !== '')
+  );
+  expect(names.length).to.be.greaterThan(0);
+  expect(names.every(name => name.length > 0)).to.be.true;
+});
+
+Then('I should see product prices for all items', async function (this: CustomWorld) {
+  const prices = await this.page!.$$eval('.inventory_item_price', elements => 
+    elements.map(el => el.textContent?.trim()).filter(text => text !== '')
+  );
+  expect(prices.length).to.be.greaterThan(0);
+  expect(prices.every(price => price.includes('$'))).to.be.true;
+});
+
+Then('I should see products sorted alphabetically', async function (this: CustomWorld) {
+  const names = await this.page!.$$eval('.inventory_item_name', elements => 
+    elements.map(el => el.textContent || '').sort()
+  );
+  const actualNames = await this.page!.$$eval('.inventory_item_name', elements => 
+    elements.map(el => el.textContent || '')
+  );
+  expect(actualNames).to.deep.equal(names);
+});
+
+Then('I should see products sorted by price ascending', async function (this: CustomWorld) {
+  const prices = await this.page!.$$eval('.inventory_item_price', elements => 
+    elements.map(el => parseFloat(el.textContent?.replace('$', '') || '0')).sort((a, b) => a - b)
+  );
+  const actualPrices = await this.page!.$$eval('.inventory_item_price', elements => 
+    elements.map(el => parseFloat(el.textContent?.replace('$', '') || '0'))
+  );
+  expect(actualPrices).to.deep.equal(prices);
+});
+
+Then('I should see text containing {string} in element {string}', async function (this: CustomWorld, expectedText: string, selector: string) {
+  const text = await this.page!.textContent(selector);
+  expect(text).to.include(expectedText);
+});
+
 Then('I should not be on page containing {string}', async function (this: CustomWorld, urlFragment: string) {
   const currentUrl = this.page!.url();
   expect(currentUrl).to.not.include(urlFragment);

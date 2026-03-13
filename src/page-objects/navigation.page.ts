@@ -7,6 +7,7 @@ export class NavigationPage extends BasePage {
   public readonly logoutButton = '#logout-sidebar-link';
   public readonly resetButton = '#reset-sidebar-link';
   public readonly closeButton = '#react-burger-cross-btn';
+  public readonly sidebarMenu = '.bm-menu-wrap';
 
   constructor(page: Page, baseUrl: string) {
     super(page, baseUrl);
@@ -14,6 +15,7 @@ export class NavigationPage extends BasePage {
 
   async openMenu(): Promise<void> {
     await this.actions.clickElement(this.menuButton);
+    await this.actions.waitForElementToBeVisible(this.sidebarMenu);
   }
 
   async closeMenu(): Promise<void> {
@@ -21,10 +23,12 @@ export class NavigationPage extends BasePage {
   }
 
   async logout(): Promise<void> {
-    await this.actions.clickElement(this.logoutButton);
+    await this.openMenu();
+    await this.page.click(this.logoutButton);
   }
 
   async resetAppState(): Promise<void> {
+    await this.openMenu();
     await this.actions.clickElement(this.resetButton);
   }
 }
