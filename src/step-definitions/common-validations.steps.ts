@@ -9,7 +9,74 @@ const logger = getLogger();
 // Element visibility validations
 Then(
   'I should {word} element {string}',
-  async function (this: CustomWorld, visibility: string, selector: string) {
+  async function (this: CustomWorld, visibility: string, elementName: string) {
+    let selector = elementName;
+    
+    // Check if elementName matches any fieldMapping in page objects
+    const { CartPage } = await import('../page-objects/cart-page/cart.page');
+    const cartPage = new CartPage(this.page!, this.baseUrl);
+    if (elementName in cartPage.fieldMapping) {
+      const mappedValue = cartPage.fieldMapping[elementName as keyof typeof cartPage.fieldMapping];
+      if (typeof mappedValue === 'string') {
+        selector = mappedValue;
+        logger.info(`Using CartPage mapped selector for "${elementName}": ${selector}`);
+      } else {
+        logger.warn(`CartPage mapped value for "${elementName}" is a function, not a string selector`);
+      }
+    } else {
+      // Check LoginPage mapping
+      const { LoginPage } = await import('../page-objects/login-page/login.page');
+      const loginPage = new LoginPage(this.page!, this.baseUrl);
+      if (elementName in loginPage.fieldMapping) {
+        const mappedValue = loginPage.fieldMapping[elementName as keyof typeof loginPage.fieldMapping];
+        if (typeof mappedValue === 'string') {
+          selector = mappedValue;
+          logger.info(`Using LoginPage mapped selector for "${elementName}": ${selector}`);
+        } else {
+          logger.warn(`LoginPage mapped value for "${elementName}" is a function, not a string selector`);
+        }
+      } else {
+        // Check InventoryPage mapping
+        const { InventoryPage } = await import('../page-objects/inventory-page/inventory.page');
+        const inventoryPage = new InventoryPage(this.page!, this.baseUrl);
+        if (elementName in inventoryPage.fieldMapping) {
+          const mappedValue = inventoryPage.fieldMapping[elementName as keyof typeof inventoryPage.fieldMapping];
+          if (typeof mappedValue === 'string') {
+            selector = mappedValue;
+            logger.info(`Using InventoryPage mapped selector for "${elementName}": ${selector}`);
+          } else {
+            logger.warn(`InventoryPage mapped value for "${elementName}" is a function, not a string selector`);
+          }
+        } else {
+          // Check NavigationPage mapping
+          const { NavigationPage } = await import('../page-objects/navigation.page');
+          const navigationPage = new NavigationPage(this.page!, this.baseUrl);
+          if (elementName in navigationPage.fieldMapping) {
+            const mappedValue = navigationPage.fieldMapping[elementName as keyof typeof navigationPage.fieldMapping];
+            if (typeof mappedValue === 'string') {
+              selector = mappedValue;
+              logger.info(`Using NavigationPage mapped selector for "${elementName}": ${selector}`);
+            } else {
+              logger.warn(`NavigationPage mapped value for "${elementName}" is a function, not a string selector`);
+            }
+          } else {
+            // Check CheckoutPage mapping
+            const { CheckoutPage } = await import('../page-objects/checkout-page/checkout.page');
+            const checkoutPage = new CheckoutPage(this.page!, this.baseUrl);
+            if (elementName in checkoutPage.fieldMapping) {
+              const mappedValue = checkoutPage.fieldMapping[elementName as keyof typeof checkoutPage.fieldMapping];
+              if (typeof mappedValue === 'string') {
+                selector = mappedValue;
+                logger.info(`Using CheckoutPage mapped selector for "${elementName}": ${selector}`);
+              } else {
+                logger.warn(`CheckoutPage mapped value for "${elementName}" is a function, not a string selector`);
+              }
+            }
+          }
+        }
+      }
+    }
+
     const isVisible = await this.page!.isVisible(selector);
     const shouldSee = visibility === 'see';
 
@@ -40,10 +107,67 @@ Then(
     action: string,
     expectedText: string,
     preposition: string,
-    selector: string
+    elementName: string
   ) {
     const shouldContain = action === 'see';
     const inElement = preposition === 'in';
+    
+    let selector = elementName;
+    
+    // Check if elementName matches any fieldMapping in page objects
+    const { CartPage } = await import('../page-objects/cart-page/cart.page');
+    const cartPage = new CartPage(this.page!, this.baseUrl);
+    if (elementName in cartPage.fieldMapping) {
+      const mappedValue = cartPage.fieldMapping[elementName as keyof typeof cartPage.fieldMapping];
+      if (typeof mappedValue === 'string') {
+        selector = mappedValue;
+        logger.info(`Using CartPage mapped selector for "${elementName}": ${selector}`);
+      }
+    } else {
+      // Check LoginPage mapping
+      const { LoginPage } = await import('../page-objects/login-page/login.page');
+      const loginPage = new LoginPage(this.page!, this.baseUrl);
+      if (elementName in loginPage.fieldMapping) {
+        const mappedValue = loginPage.fieldMapping[elementName as keyof typeof loginPage.fieldMapping];
+        if (typeof mappedValue === 'string') {
+          selector = mappedValue;
+          logger.info(`Using LoginPage mapped selector for "${elementName}": ${selector}`);
+        }
+      } else {
+        // Check InventoryPage mapping
+        const { InventoryPage } = await import('../page-objects/inventory-page/inventory.page');
+        const inventoryPage = new InventoryPage(this.page!, this.baseUrl);
+        if (elementName in inventoryPage.fieldMapping) {
+          const mappedValue = inventoryPage.fieldMapping[elementName as keyof typeof inventoryPage.fieldMapping];
+          if (typeof mappedValue === 'string') {
+            selector = mappedValue;
+            logger.info(`Using InventoryPage mapped selector for "${elementName}": ${selector}`);
+          }
+        } else {
+          // Check NavigationPage mapping
+          const { NavigationPage } = await import('../page-objects/navigation.page');
+          const navigationPage = new NavigationPage(this.page!, this.baseUrl);
+          if (elementName in navigationPage.fieldMapping) {
+            const mappedValue = navigationPage.fieldMapping[elementName as keyof typeof navigationPage.fieldMapping];
+            if (typeof mappedValue === 'string') {
+              selector = mappedValue;
+              logger.info(`Using NavigationPage mapped selector for "${elementName}": ${selector}`);
+            }
+          } else {
+            // Check CheckoutPage mapping
+            const { CheckoutPage } = await import('../page-objects/checkout-page/checkout.page');
+            const checkoutPage = new CheckoutPage(this.page!, this.baseUrl);
+            if (elementName in checkoutPage.fieldMapping) {
+              const mappedValue = checkoutPage.fieldMapping[elementName as keyof typeof checkoutPage.fieldMapping];
+              if (typeof mappedValue === 'string') {
+                selector = mappedValue;
+                logger.info(`Using CheckoutPage mapped selector for "${elementName}": ${selector}`);
+              }
+            }
+          }
+        }
+      }
+    }
 
     if (inElement) {
       const text = await this.page!.textContent(selector);
@@ -255,6 +379,83 @@ Then(
       );
       throw error;
     }
+  }
+);
+
+Then(
+  'I should not see text {string} in element {string}',
+  async function (this: CustomWorld, expectedText: string, elementName: string) {
+    let selector = elementName;
+    
+    // Check if elementName matches any fieldMapping in page objects
+    const { CartPage } = await import('../page-objects/cart-page/cart.page');
+    const cartPage = new CartPage(this.page!, this.baseUrl);
+    if (elementName in cartPage.fieldMapping) {
+      const mappedValue = cartPage.fieldMapping[elementName as keyof typeof cartPage.fieldMapping];
+      if (typeof mappedValue === 'string') {
+        selector = mappedValue;
+        logger.info(`Using CartPage mapped selector for "${elementName}": ${selector}`);
+      }
+    } else {
+      // Check LoginPage mapping
+      const { LoginPage } = await import('../page-objects/login-page/login.page');
+      const loginPage = new LoginPage(this.page!, this.baseUrl);
+      if (elementName in loginPage.fieldMapping) {
+        const mappedValue = loginPage.fieldMapping[elementName as keyof typeof loginPage.fieldMapping];
+        if (typeof mappedValue === 'string') {
+          selector = mappedValue;
+          logger.info(`Using LoginPage mapped selector for "${elementName}": ${selector}`);
+        }
+      } else {
+        // Check InventoryPage mapping
+        const { InventoryPage } = await import('../page-objects/inventory-page/inventory.page');
+        const inventoryPage = new InventoryPage(this.page!, this.baseUrl);
+        if (elementName in inventoryPage.fieldMapping) {
+          const mappedValue = inventoryPage.fieldMapping[elementName as keyof typeof inventoryPage.fieldMapping];
+          if (typeof mappedValue === 'string') {
+            selector = mappedValue;
+            logger.info(`Using InventoryPage mapped selector for "${elementName}": ${selector}`);
+          }
+        } else {
+          // Check NavigationPage mapping
+          const { NavigationPage } = await import('../page-objects/navigation.page');
+          const navigationPage = new NavigationPage(this.page!, this.baseUrl);
+          if (elementName in navigationPage.fieldMapping) {
+            const mappedValue = navigationPage.fieldMapping[elementName as keyof typeof navigationPage.fieldMapping];
+            if (typeof mappedValue === 'string') {
+              selector = mappedValue;
+              logger.info(`Using NavigationPage mapped selector for "${elementName}": ${selector}`);
+            }
+          } else {
+            // Check CheckoutPage mapping
+            const { CheckoutPage } = await import('../page-objects/checkout-page/checkout.page');
+            const checkoutPage = new CheckoutPage(this.page!, this.baseUrl);
+            if (elementName in checkoutPage.fieldMapping) {
+              const mappedValue = checkoutPage.fieldMapping[elementName as keyof typeof checkoutPage.fieldMapping];
+              if (typeof mappedValue === 'string') {
+                selector = mappedValue;
+                logger.info(`Using CheckoutPage mapped selector for "${elementName}": ${selector}`);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    const text = await this.page!.textContent(selector);
+    logger.info(`Checking that text "${expectedText}" is NOT in element: ${selector}`);
+    expect(text).to.not.include(expectedText);
+    logger.info(`Text "${expectedText}" correctly not found in element: ${selector}`);
+  }
+);
+
+Then(
+  'I should not see text {string} on page',
+  async function (this: CustomWorld, expectedText: string) {
+    const pageText = await this.page!.textContent('body');
+    logger.info(`Checking that text "${expectedText}" is NOT on page`);
+    expect(pageText).to.not.include(expectedText);
+    logger.info(`Text "${expectedText}" correctly not found on page`);
   }
 );
 

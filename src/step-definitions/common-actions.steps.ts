@@ -238,7 +238,64 @@ When('I sort products by price low to high', async function (this: CustomWorld) 
 
 When(
   'I wait for element {string} to be visible',
-  async function (this: CustomWorld, selector: string) {
+  async function (this: CustomWorld, elementName: string) {
+    let selector = elementName;
+    
+    // Check if elementName matches any fieldMapping in page objects
+    const { CartPage } = await import('../page-objects/cart-page/cart.page');
+    const cartPage = new CartPage(this.page!, this.baseUrl);
+    if (elementName in cartPage.fieldMapping) {
+      const mappedValue = cartPage.fieldMapping[elementName as keyof typeof cartPage.fieldMapping];
+      if (typeof mappedValue === 'string') {
+        selector = mappedValue;
+        logger.info(`Using CartPage mapped selector for "${elementName}": ${selector}`);
+      }
+    } else {
+      // Check LoginPage mapping
+      const { LoginPage } = await import('../page-objects/login-page/login.page');
+      const loginPage = new LoginPage(this.page!, this.baseUrl);
+      if (elementName in loginPage.fieldMapping) {
+        const mappedValue = loginPage.fieldMapping[elementName as keyof typeof loginPage.fieldMapping];
+        if (typeof mappedValue === 'string') {
+          selector = mappedValue;
+          logger.info(`Using LoginPage mapped selector for "${elementName}": ${selector}`);
+        }
+      } else {
+        // Check InventoryPage mapping
+        const { InventoryPage } = await import('../page-objects/inventory-page/inventory.page');
+        const inventoryPage = new InventoryPage(this.page!, this.baseUrl);
+        if (elementName in inventoryPage.fieldMapping) {
+          const mappedValue = inventoryPage.fieldMapping[elementName as keyof typeof inventoryPage.fieldMapping];
+          if (typeof mappedValue === 'string') {
+            selector = mappedValue;
+            logger.info(`Using InventoryPage mapped selector for "${elementName}": ${selector}`);
+          }
+        } else {
+          // Check NavigationPage mapping
+          const { NavigationPage } = await import('../page-objects/navigation.page');
+          const navigationPage = new NavigationPage(this.page!, this.baseUrl);
+          if (elementName in navigationPage.fieldMapping) {
+            const mappedValue = navigationPage.fieldMapping[elementName as keyof typeof navigationPage.fieldMapping];
+            if (typeof mappedValue === 'string') {
+              selector = mappedValue;
+              logger.info(`Using NavigationPage mapped selector for "${elementName}": ${selector}`);
+            }
+          } else {
+            // Check CheckoutPage mapping
+            const { CheckoutPage } = await import('../page-objects/checkout-page/checkout.page');
+            const checkoutPage = new CheckoutPage(this.page!, this.baseUrl);
+            if (elementName in checkoutPage.fieldMapping) {
+              const mappedValue = checkoutPage.fieldMapping[elementName as keyof typeof checkoutPage.fieldMapping];
+              if (typeof mappedValue === 'string') {
+                selector = mappedValue;
+                logger.info(`Using CheckoutPage mapped selector for "${elementName}": ${selector}`);
+              }
+            }
+          }
+        }
+      }
+    }
+
     logger.info(`Waiting for element to be visible: ${selector}`);
     try {
       await this.page!.waitForSelector(selector, { state: 'visible' });
@@ -252,7 +309,64 @@ When(
 
 When(
   'I wait for element {string} to be hidden',
-  async function (this: CustomWorld, selector: string) {
+  async function (this: CustomWorld, elementName: string) {
+    let selector = elementName;
+    
+    // Check if elementName matches any fieldMapping in page objects
+    const { CartPage } = await import('../page-objects/cart-page/cart.page');
+    const cartPage = new CartPage(this.page!, this.baseUrl);
+    if (elementName in cartPage.fieldMapping) {
+      const mappedValue = cartPage.fieldMapping[elementName as keyof typeof cartPage.fieldMapping];
+      if (typeof mappedValue === 'string') {
+        selector = mappedValue;
+        logger.info(`Using CartPage mapped selector for "${elementName}": ${selector}`);
+      }
+    } else {
+      // Check LoginPage mapping
+      const { LoginPage } = await import('../page-objects/login-page/login.page');
+      const loginPage = new LoginPage(this.page!, this.baseUrl);
+      if (elementName in loginPage.fieldMapping) {
+        const mappedValue = loginPage.fieldMapping[elementName as keyof typeof loginPage.fieldMapping];
+        if (typeof mappedValue === 'string') {
+          selector = mappedValue;
+          logger.info(`Using LoginPage mapped selector for "${elementName}": ${selector}`);
+        }
+      } else {
+        // Check InventoryPage mapping
+        const { InventoryPage } = await import('../page-objects/inventory-page/inventory.page');
+        const inventoryPage = new InventoryPage(this.page!, this.baseUrl);
+        if (elementName in inventoryPage.fieldMapping) {
+          const mappedValue = inventoryPage.fieldMapping[elementName as keyof typeof inventoryPage.fieldMapping];
+          if (typeof mappedValue === 'string') {
+            selector = mappedValue;
+            logger.info(`Using InventoryPage mapped selector for "${elementName}": ${selector}`);
+          }
+        } else {
+          // Check NavigationPage mapping
+          const { NavigationPage } = await import('../page-objects/navigation.page');
+          const navigationPage = new NavigationPage(this.page!, this.baseUrl);
+          if (elementName in navigationPage.fieldMapping) {
+            const mappedValue = navigationPage.fieldMapping[elementName as keyof typeof navigationPage.fieldMapping];
+            if (typeof mappedValue === 'string') {
+              selector = mappedValue;
+              logger.info(`Using NavigationPage mapped selector for "${elementName}": ${selector}`);
+            }
+          } else {
+            // Check CheckoutPage mapping
+            const { CheckoutPage } = await import('../page-objects/checkout-page/checkout.page');
+            const checkoutPage = new CheckoutPage(this.page!, this.baseUrl);
+            if (elementName in checkoutPage.fieldMapping) {
+              const mappedValue = checkoutPage.fieldMapping[elementName as keyof typeof checkoutPage.fieldMapping];
+              if (typeof mappedValue === 'string') {
+                selector = mappedValue;
+                logger.info(`Using CheckoutPage mapped selector for "${elementName}": ${selector}`);
+              }
+            }
+          }
+        }
+      }
+    }
+
     logger.info(`Waiting for element to be hidden: ${selector}`);
     try {
       await this.page!.waitForSelector(selector, { state: 'hidden' });
@@ -263,6 +377,71 @@ When(
     }
   }
 );
+
+When('I fill checkout information with {string}, {string}, {string}', async function (this: CustomWorld, firstName: string, lastName: string, postalCode: string) {
+  logger.info(`Filling checkout information: ${firstName} ${lastName}, ${postalCode}`);
+  try {
+    const { CheckoutPage } = await import('../page-objects/checkout-page/checkout.page');
+    const checkoutPage = new CheckoutPage(this.page!, this.baseUrl);
+    await checkoutPage.fillCheckoutInformation(firstName, lastName, postalCode);
+    logger.info('Successfully filled checkout information');
+  } catch (error) {
+    logger.error(`Failed to fill checkout information: ${error}`);
+    throw error;
+  }
+});
+
+When('I continue checkout', async function (this: CustomWorld) {
+  logger.info('Continuing checkout process');
+  try {
+    const { CheckoutPage } = await import('../page-objects/checkout-page/checkout.page');
+    const checkoutPage = new CheckoutPage(this.page!, this.baseUrl);
+    await checkoutPage.continueCheckout();
+    logger.info('Successfully continued checkout');
+  } catch (error) {
+    logger.error(`Failed to continue checkout: ${error}`);
+    throw error;
+  }
+});
+
+When('I finish checkout', async function (this: CustomWorld) {
+  logger.info('Finishing checkout process');
+  try {
+    const { CheckoutPage } = await import('../page-objects/checkout-page/checkout.page');
+    const checkoutPage = new CheckoutPage(this.page!, this.baseUrl);
+    await checkoutPage.finishCheckout();
+    logger.info('Successfully finished checkout');
+  } catch (error) {
+    logger.error(`Failed to finish checkout: ${error}`);
+    throw error;
+  }
+});
+
+When('I cancel checkout', async function (this: CustomWorld) {
+  logger.info('Canceling checkout process');
+  try {
+    const { CheckoutPage } = await import('../page-objects/checkout-page/checkout.page');
+    const checkoutPage = new CheckoutPage(this.page!, this.baseUrl);
+    await checkoutPage.cancelCheckout();
+    logger.info('Successfully canceled checkout');
+  } catch (error) {
+    logger.error(`Failed to cancel checkout: ${error}`);
+    throw error;
+  }
+});
+
+When('I go back to products', async function (this: CustomWorld) {
+  logger.info('Going back to products page');
+  try {
+    const { CheckoutPage } = await import('../page-objects/checkout-page/checkout.page');
+    const checkoutPage = new CheckoutPage(this.page!, this.baseUrl);
+    await checkoutPage.backToProducts();
+    logger.info('Successfully navigated back to products');
+  } catch (error) {
+    logger.error(`Failed to go back to products: ${error}`);
+    throw error;
+  }
+});
 
 // Network actions
 When('there is a network connection issue', async function (this: CustomWorld) {

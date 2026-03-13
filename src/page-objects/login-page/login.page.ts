@@ -8,6 +8,17 @@ export class LoginPage extends BasePage {
   public readonly errorMessage = '[data-test="error"]';
   public readonly welcomeMessage = '.app_logo';
 
+  fieldMapping = {
+    'Username field': this.usernameInput,
+    'Password field': this.passwordInput,
+    'Login button': this.loginButton,
+    'Error message': this.errorMessage,
+    'Welcome message': this.welcomeMessage,
+    'Inventory list': '.inventory_list',
+    'Product title': '.title',
+    'Authentication error': '[data-test="error"]'
+  };
+
   constructor(page: Page, baseUrl: string) {
     super(page, baseUrl);
   }

@@ -9,6 +9,14 @@ export class NavigationPage extends BasePage {
   public readonly closeButton = '#react-burger-cross-btn';
   public readonly sidebarMenu = '.bm-menu-wrap';
 
+  fieldMapping = {
+    'Menu button': this.menuButton,
+    'Logout button': this.logoutButton,
+    'Reset button': this.resetButton,
+    'Close button': this.closeButton,
+    'Sidebar menu': this.sidebarMenu
+  };
+
   constructor(page: Page, baseUrl: string) {
     super(page, baseUrl);
   }

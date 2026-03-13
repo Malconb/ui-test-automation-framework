@@ -15,6 +15,21 @@ export class InventoryPage extends BasePage {
   public readonly menuButton = '#react-burger-menu-btn';
   public readonly logoutButton = '#logout-sidebar-link';
 
+  fieldMapping = {
+    'Inventory list': this.inventoryList,
+    'Product title': this.productTitle,
+    'Product items': this.productItems,
+    'Product names': this.productNames,
+    'Product prices': this.productPrices,
+    'Add to cart buttons': this.addToCartButtons,
+    'Cart badge': this.cartBadge,
+    'Sort dropdown': this.sortDropdown,
+    'Menu button': this.menuButton,
+    'Logout button': this.logoutButton,
+    'Shopping cart badge': '.shopping_cart_badge',
+    'Products': '.title'
+  };
+
   // Product-specific selectors for natural language steps
   private readonly productSelectors = {
     'Sauce Labs Backpack': '.inventory_item:has-text("Sauce Labs Backpack") .btn_inventory',

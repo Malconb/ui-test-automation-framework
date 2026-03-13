@@ -10,11 +10,12 @@ export class CartPage extends BasePage {
     public readonly continueShoppingButton = '[data-test="continue-shopping"]';
 
     fieldMapping = {
-        'Cart title': (text: string) => '[data-test="title"]',
+        'Cart title': '[data-test="title"]',
+        'Cart list': '[data-test=\"cart-list\"]',
         'Item name': (text: string) => `[data-test="test-Item name - ${text}"]`,
         'Remove item button': (text: string) => `[data-test="test-Remove - ${text}"]`,
-        'Continue shopping button': (text: string) => '[data-test="continue-shopping"]',
-        'Checkout button': (text: string) => '[data-test="checkout"]'
+        'Continue shopping button':'[data-test="continue-shopping"]',
+        'Checkout button': '[data-test="checkout"]'
     };
 
     constructor(page: Page, baseUrl: string) {
